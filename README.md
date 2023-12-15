@@ -8,6 +8,17 @@ This project was developed as part of a computer science course to apply fundame
 
 Basic Music Manager App is a lightweight web application for managing songs. It provides CRUD (Create, Read, Update, Delete) functionality for songs, along with the ability to browse artists and filter songs by artist type.
 
+## Table of Contents
+
+- [Basic Music Manager App](#basic-music-manager-app)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Technologies](#technologies)
+  - [App Structure](#app-structure)
+  - [Features](#features)
+  - [Illustrations](#illustrations)
+  - [Usage](#usage)
+
 ## Technologies
 
 | Name | Version |
@@ -17,6 +28,10 @@ Basic Music Manager App is a lightweight web application for managing songs. It 
 | Composer | 1.10.13 |
 | Bootstrap | 4.5.3 |
 | mySQL | 8.0.22 |
+
+## App Structure
+
+<img src="./img/SchémaApp.png">
 
 ## Features
 
