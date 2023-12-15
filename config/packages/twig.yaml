@@ -1,0 +1,9 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        nomBlog: "Blog PHILIPPE"
+        nomDisco: "Disco Eric PHILIPPE"
+        categoryRepository: "@App\\Repository\\CategoryRepository"
+when@test:
+    twig:
+        strict_variables: true

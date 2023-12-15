@@ -1,0 +1,54 @@
+{% extends 'base_disco.html.twig' %}
+
+{% block title %} Disco Time {% endblock %}
+
+{% block body %}
+    <h1 class="mt-4">🪩 It's DISCOTIME! 🪩</h1>
+
+    <div class="d-flex justify-content-center">
+        <div class="text-center">
+            <h4 class="mt-4">🎤 {{ artistes|length }} Artistes 🎤</h4>
+        </div>
+       
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="text-center">
+            <h5 class="mt-2">Dans la catégorie <strong>{{ type.getType() }}</strong></h5>
+        </div>
+    </div>
+
+    <div class="row mt-2 equal-height-cards">
+        {% for artiste in artistes %}
+            <div class="col-md-4 mb-4">
+                <div class="card position-relative artist-card" style="width: 100%;">
+                    <img src={{ artiste.getPhoto() }} class="card-img-top" alt="Trop nul l'image">
+                     <div class="icon-container position-absolute">
+                     🎤
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{ artiste.getNomComplet() }}</h4>
+                        <p class="card-text"> 
+                            🏷️ {{ artiste.getType().getType() }}
+                            <div class="fw-light fs-6">
+                                🎵 "{{ artiste.getDescription() }}"
+                            </div>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                    <li class="list-group-item">📅 Date de naissance : {{ artiste.getDateNaissance()|date('d/m/Y') }}</li>
+                    <li class="list-group-item">📍 Lieu de naissance : {{ artiste.getLieuNaissance() }}</li>
+                    {% if countSongPerArtist[artiste.getId()] is defined %}
+                        <li class="list-group-item">💽 Nombre d'album : {{ countSongPerArtist[artiste.getId()] }} albums</li>
+                    {% else %}
+                        <li class="list-group-item">💽 Nombre d'album : 0 album</li>
+                    {% endif %}
+                </ul>
+                <div class="card-footer">
+                    <a class="btn btn-primary" href="{{ path('app_artiste_consult', {'slug': artiste.id}) }}">🔍 Voir plus</a>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

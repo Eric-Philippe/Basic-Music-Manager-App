@@ -1,0 +1,42 @@
+{% extends 'base_disco.html.twig' %}
+
+{% block title %} Disco Time {% endblock %}
+
+{% block body %}
+    <h1 class="mt-4">🪩 It's DISCOTIME! 🪩</h1>
+
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success"> {{ message }} </div>
+    {% endfor %}
+
+    <div class="row mt-2">
+        {% for chanson in chansons %}
+            <div class="col-md-3 mb-3">
+                <div class="card position-relative disco-card" style="width: 100%;">
+                    <img src={{ chanson.photoCouverture }} class="card-img-top" alt="Trop nul l'image">
+                     <div class="icon-container position-absolute">
+                        💽
+                    </div>
+                    <div class="play-icon position-absolute"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ chanson.titre }}</h5>
+                        <p class="card-text">🎤 
+                            {% for artiste in chanson.getArtistes() %}
+                                {{ artiste.getNomComplet() }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Genre : {{ chanson.getGenre() }}</li>
+                        <li class="list-group-item">Sortie : {{ chanson.getDateSortie()|date('d/m/Y') }}</li>
+                    </ul>
+                    <div class="card-footer text-body-secondary">
+                        <a href="{{ path('app_chanson_consult', {'slug': chanson.id}) }}" class="btn btn-primary">🔍 Consulter | 🖊️ Editer</a>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

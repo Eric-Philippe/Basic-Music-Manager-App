@@ -1,0 +1,85 @@
+{% extends 'base_disco.html.twig' %}
+
+{% block title %} Disco Time - Créer une Chanson {% endblock %}
+    
+{% block body %}
+    <h1 class="mt-4">Créer une Chanson</h1>
+    <div class="mt-2">
+        <form method="post">
+            {{ form_start(form) }}
+            <div class="mb-3">
+                {{ form_label(form.titre) }}
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.dateSortie) }}
+                <input type="date" id="dateSortie" name="dateSortie" class="form-control" min="1920-01-01" max="2023-12-31" value="{{ form.vars.value.dateSortie|date('Y-m-d') }}" required>
+            </div>
+
+
+            <div class="mb-3">
+                {{ form_label(form.genre) }}
+                {{ form_widget(form.genre, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.langue) }}
+                {{ form_widget(form.langue, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.photoCouverture) }}
+                {{ form_widget(form.photoCouverture, {'attr': {'class': 'form-control'}, 'value': randomPhoto} ) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.artistes) }}
+                {{ form_widget(form.artistes, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <input type="text" id="searchArtists" class="form-control mb-3" placeholder="Rechercher un artiste">
+
+            <button class="btn btn-primary">{{ button_label|default('Créer la Chanson') }}</button>  
+            
+            {{ form_widget(form.dateSortie, {'attr': {'style': 'display: none'} }) }} 
+
+            {{ form_end(form) }}
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var daySelect = document.getElementById('chanson_dateSortie_day');
+                    var monthSelect = document.getElementById('chanson_dateSortie_month');
+                    var yearSelect = document.getElementById('chanson_dateSortie_year');
+            
+                    var dateSortieInput = document.getElementById('dateSortie');
+            
+                    dateSortieInput.addEventListener('input', function() {
+                        var selectedDate = new Date(dateSortieInput.value);
+                        
+                        daySelect.value = selectedDate.getDate();
+                        monthSelect.value = selectedDate.getMonth() + 1;
+                        yearSelect.value = selectedDate.getFullYear();
+                    });
+                });
+            </script>
+            <script>
+                document.getElementById('searchArtists').addEventListener('input', function() {
+                    var input, filter, select, option, i;
+                    input = document.getElementById('searchArtists');
+                    filter = input.value.toUpperCase();
+                    select = document.getElementById('chanson_artistes');
+                    option = select.getElementsByTagName('option');
+                    
+                    for (i = 0; i < option.length; i++) {
+                        if (option[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            option[i].style.display = '';
+                        } else {
+                            option[i].style.display = 'none';
+                        }
+                    }
+                });
+            </script>
+        </form>
+    </div>
+{% endblock %}

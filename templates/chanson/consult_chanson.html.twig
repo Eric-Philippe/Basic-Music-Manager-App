@@ -1,0 +1,164 @@
+{% extends 'base_disco.html.twig' %}
+
+{% block title %} Disco Time - Consulter une Chanson {% endblock %}
+    
+{% block body %}
+    <h1 class="mt-4" id="page-sub-title">Consulter une Chanson</h1>
+    <div class="mt-2">
+        <form method="post">
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="enableEdit">
+                <label class="form-check-label" for="enableEdit">Activer l'édition</label>
+            </div>
+
+            {{ form_start(form) }}
+            <div class="mb-3">
+                {{ form_label(form.titre) }}
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.dateSortie) }}
+                <input type="date" id="dateSortie" name="dateSortie" class="form-control" min="1920-01-01" max="2023-12-31" value="{{ form.vars.value.dateSortie|date('Y-m-d') }}" required>
+            </div>
+
+
+            <div class="mb-3">
+                {{ form_label(form.genre) }}
+                {{ form_widget(form.genre, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.langue) }}
+                {{ form_widget(form.langue, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.photoCouverture) }}
+                {{ form_widget(form.photoCouverture, {'attr': {'class': 'form-control'}} ) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.artistes) }}
+                {{ form_widget(form.artistes, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <input type="text" id="searchArtists" class="form-control mb-3" placeholder="Rechercher un artiste">
+
+            <div id="list-artists-buttons" class="mb-3"></div>
+
+            <div class="d-flex align-items-center">
+                <button id="submit-edit" class="btn btn-success"style=
+                "margin-right: 10px;">{{ button_label|default('💾 Sauvegarder les modifications') }}</button>
+                {{ form_widget(form.dateSortie, {'attr': {'style': 'display: none'} }) }} 
+                {{ form_end(form) }}
+
+                <form method="post" action="{{ path('app_chanson_delete', {'id': chanson.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette chanson ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ chanson.id) }}">
+                    <button class="btn btn-danger">🗑️ Supprimer la chanson</button>
+                </form>
+            </div>
+
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var selectedArtists = document.querySelectorAll('#chanson_artistes option:checked');
+
+                    // Mettre des liens dans la div pour les artistes sélectionnés
+                    var listArtistsDiv = document.getElementById('list-artists-buttons');
+                    listArtistsDiv.innerHTML = '';
+                    selectedArtists.forEach(function (artist) {
+                        var link = document.createElement('a');
+                        link.className = 'btn btn-sm btn-secondary mr-2 mb-2';
+                        link.textContent = "⏏️" + artist.textContent;
+                        var url = `{{ path('app_artiste_consult', {'slug':'ALED'})|raw }}`;
+                        url = url.replace('ALED', artist.value);
+                        link.href = url;
+                    
+                        listArtistsDiv.appendChild(link);
+                    });
+                    
+            
+                    // Ajouter un écouteur d'événements pour le changement dans le champ de sélection multiple
+                    var artistSelect = document.getElementById('chanson_artistes');
+                    artistSelect.addEventListener('change', function() {
+                        var selectedArtists = document.querySelectorAll('#chanson_artistes option:checked');
+                        listArtistsDiv.innerHTML = '';
+                        selectedArtists.forEach(function(artist) {
+                            var link = document.createElement('a');
+                            link.className = 'btn btn-sm btn-secondary mr-2 mb-2';
+                            link.textContent = "⏏️" + artist.textContent;
+                            var url = `{{ path('app_artiste_consult', {'slug':'ALED'})|raw }}`;
+                            url = url.replace('ALED', artist.value);
+                            link.href = url;
+                        
+                            listArtistsDiv.appendChild(link);
+                        });
+                    });
+                });
+            </script>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var enableEditCheckbox = document.getElementById('enableEdit');
+
+                    enableEditCheckbox.addEventListener('change', function() {
+                        var readOnly = !enableEditCheckbox.checked;
+
+                        var formFields = document.querySelectorAll('form input, form select, form textarea');
+                        formFields = Array.prototype.filter.call(formFields, function(field) {
+                            return field.type !== 'checkbox';
+                        });
+                        formFields.forEach(function(field) {
+                            field.readOnly = readOnly;
+                            field.disabled = readOnly;
+                        });
+
+                        var saveButton = document.getElementById('submit-edit');
+                        saveButton.disabled = readOnly;
+
+                        var pageTitle = document.getElementById('page-sub-title');
+                        pageTitle.textContent = readOnly ? 'Consulter une Chanson 🔎' : 'Éditer une Chanson 🚧';                    
+                    });
+
+                    enableEditCheckbox.dispatchEvent(new Event('change'));
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var daySelect = document.getElementById('chanson_dateSortie_day');
+                    var monthSelect = document.getElementById('chanson_dateSortie_month');
+                    var yearSelect = document.getElementById('chanson_dateSortie_year');
+            
+                    var dateSortieInput = document.getElementById('dateSortie');
+            
+                    dateSortieInput.addEventListener('input', function() {
+                        var selectedDate = new Date(dateSortieInput.value);
+                        
+                        daySelect.value = selectedDate.getDate();
+                        monthSelect.value = selectedDate.getMonth() + 1;
+                        yearSelect.value = selectedDate.getFullYear();
+                    });
+                });
+            </script>
+            <script>
+                document.getElementById('searchArtists').addEventListener('input', function() {
+                    var input, filter, select, option, i;
+                    input = document.getElementById('searchArtists');
+                    filter = input.value.toUpperCase();
+                    select = document.getElementById('chanson_artistes');
+                    option = select.getElementsByTagName('option');
+                    
+                    for (i = 0; i < option.length; i++) {
+                        if (option[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            option[i].style.display = '';
+                        } else {
+                            option[i].style.display = 'none';
+                        }
+                    }
+                });
+            </script>
+
+        </form>
+    </div>
+{% endblock %}

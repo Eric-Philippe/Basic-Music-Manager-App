@@ -1,0 +1,49 @@
+.disco-card {
+  position: relative;
+}
+
+/**
+* Hide the underline and the blue color of the link
+for a <a> tag with the class "hidden-link"
+*/
+a.hidden-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.artist-card {
+  transition: background-color 0.3s ease;
+}
+
+.artist-card:hover {
+  filter: brightness(1.2);
+}
+
+.row.equal-height-cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+}
+
+.play-icon {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(20%, -50%);
+  rotate: 270deg;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 20px solid white; /* ou la couleur que vous préférez */
+  opacity: 0; /* Initialement invisible */
+  transition: opacity 0.3s ease; /* Ajoute une transition en douceur */
+}
+
+.disco-card:hover .play-icon {
+  opacity: 1;
+  filter: brightness(1.2);
+}
